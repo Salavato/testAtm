@@ -1,16 +1,15 @@
 package com.atm.sa;
 
-import java.util.ArrayList;
+import com.atm.sa.account.Account;
+import com.atm.sa.atm.Atm;
+import com.atm.sa.client.Client;
+
+import javax.sound.midi.Soundbank;
+import java.math.BigDecimal;
+
 
 public class Main {
-
     public static void main(String[] args) {
-	// write your code here
-        Client client1 = new Client(0001,1122,true);
-
-        ArrayList<Client> list = new ArrayList<Client>();
-        list.add(client1);
-        System.out.println(client1.cardExist);
 
 
     }
