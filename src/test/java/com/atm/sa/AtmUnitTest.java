@@ -21,7 +21,7 @@ public class AtmUnitTest {
         BigDecimal rez = BigDecimal.ZERO;
         atm.atmStart(client1);
         if (atm.isPinValid(1122)) {  // atm.isPinValid(client1.getPin());
-            rez = atm.getAmount(BigDecimal.valueOf(1000));
+            rez = atm.getMoneyForClient(BigDecimal.valueOf(1000));
         }
         System.out.println("Клиенту удалось снять: " + rez + " руб.");
 
@@ -43,7 +43,7 @@ public class AtmUnitTest {
         BigDecimal rez = BigDecimal.ZERO;
         atm.atmStart(client1);
         if (atm.isPinValid(1111)) {  // atm.isPinValid(client1.getPin());
-            rez = atm.getAmount(BigDecimal.valueOf(1000));
+            rez = atm.getMoneyForClient(BigDecimal.valueOf(1000));
         }
         System.out.println("Клиенту удалось снять: " + rez + " руб.");
 
