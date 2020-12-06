@@ -2,6 +2,7 @@ package com.atm.sa;
 
 import com.atm.sa.account.Account;
 import com.atm.sa.account.DefaultAccount;
+import com.atm.sa.account.SavingAccount;
 import com.atm.sa.atm.Atm;
 import com.atm.sa.client.Client;
 import com.atm.sa.exception.BusinessException;
@@ -85,6 +86,21 @@ public class AtmUnitTest {
         Assert.assertEquals(BigDecimal.valueOf(0), rez);
         Assert.assertEquals(BigDecimal.valueOf(500100), account.getMoney());
         Assert.assertEquals(BigDecimal.valueOf(1010), atm.getMoney());
+    }
+
+    @Test
+    public void cantGetMoneyInSavingAccount() {
+        SavingAccount account = new SavingAccount(BigDecimal.valueOf(1000));
+        Client<SavingAccount> client = new Client<>(1122, account);
+        Atm atm = new Atm(BigDecimal.valueOf(100500));
+
+        atm.atmStart(client);
+        atm.enterPinCode(1122);
+        BigDecimal rez = atm.getMoneyForClient(BigDecimal.valueOf(100));
+
+        Assert.assertEquals(BigDecimal.valueOf(0), rez);
+        Assert.assertEquals(BigDecimal.valueOf(1000), account.getMoney());
+        Assert.assertEquals(BigDecimal.valueOf(100500), atm.getMoney());
     }
 
 }
