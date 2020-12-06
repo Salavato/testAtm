@@ -1,6 +1,7 @@
 package com.atm.sa.atm;
 
 import com.atm.sa.account.Account;
+import com.atm.sa.account.DefaultAccount;
 import com.atm.sa.client.Client;
 import com.atm.sa.exception.BusinessException;
 import lombok.Data;
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
 
 @Data
 public class Atm {
-    private static final Client EMPTY_CLIENT = new Client(0000, new Account(BigDecimal.ZERO));
+    private static final Client EMPTY_CLIENT = new Client(0000, new DefaultAccount(BigDecimal.ZERO));
     private BigDecimal money;
     private Client client; //клиент который вставил свою карту
     private int pinCode;
