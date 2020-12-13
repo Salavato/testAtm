@@ -1,6 +1,5 @@
 package com.atm.sa;
 
-import com.atm.sa.account.Account;
 import com.atm.sa.account.DefaultAccount;
 import com.atm.sa.account.SavingAccount;
 import com.atm.sa.atm.Atm;
