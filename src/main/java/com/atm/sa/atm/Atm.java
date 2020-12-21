@@ -5,13 +5,18 @@ import com.atm.sa.client.Client;
 import com.atm.sa.exception.BusinessException;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.function.Predicate;
 
 @Data
 public class Atm {
     private static final Client EMPTY_CLIENT = new Client(0000, new DefaultAccount(BigDecimal.ZERO));
+    @NotNull
+    @PositiveOrZero
     private BigDecimal money;
+    @NotNull(message = "Используйте вместо null EMPTY_CLIENT")
     private Client client; //клиент который вставил свою карту
     private int pinCode;
     private int pinCodeCount;
