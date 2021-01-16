@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="atmMoney" class="java.math.BigDecimal">
+        <constructor-arg value="10100500"/>
+    </bean>
+
+    <bean id="Atm" class="com.atm.sa.atm.Atm" >
+        <constructor-arg ref="atmMoney" />
+    </bean>
+
+    <bean id="Account1Money" class="java.math.BigDecimal" >
+        <constructor-arg value="500100" type="long"/>
+    </bean>
+
+    <bean id="Account1" class="com.atm.sa.account.DefaultAccount">
+        <constructor-arg name="money" ref="Account1Money"/>
+    </bean>
+
+    <bean id="Client1" class="com.atm.sa.client.Client" >
+        <constructor-arg value="1122" />
+        <constructor-arg ref="Account1"/>
+    </bean>
+
+
+    <bean id="SavingAccount2Money" class="java.math.BigDecimal" >
+        <constructor-arg value="500" type="long"/>
+    </bean>
+
+    <bean id="SavingAccount1" class="com.atm.sa.account.SavingAccount">
+        <constructor-arg ref="SavingAccount2Money" />
+    </bean>
+
+    <bean id="Client2" class="com.atm.sa.client.Client" >
+        <constructor-arg value="1122" />
+        <constructor-arg ref="SavingAccount1"/>
+    </bean>
+
+
+    <bean id="SavingAccount3Money" class="java.math.BigDecimal" >
+        <constructor-arg value="1000" type="long"/>
+    </bean>
+
+    <bean id="SavingAccount2" class="com.atm.sa.account.SavingAccount">
+        <constructor-arg ref="SavingAccount3Money" />
+    </bean>
+
+    <bean id="Client3" class="com.atm.sa.client.Client" >
+        <constructor-arg value="1122" />
+        <constructor-arg ref="SavingAccount2"/>
+    </bean>
+
+
+</beans>

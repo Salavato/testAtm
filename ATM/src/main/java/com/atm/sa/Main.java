@@ -1,11 +1,11 @@
 package com.atm.sa;
 
 import com.atm.sa.account.DefaultAccount;
-import com.atm.sa.account.SavingAccount;
 import com.atm.sa.atm.Atm;
 import com.atm.sa.client.Client;
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -23,9 +23,11 @@ public class Main {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
-        DefaultAccount account = new DefaultAccount(BigDecimal.valueOf(500100));
-        Client<DefaultAccount> client1 = new Client<>(1122, account);
-        Atm atm = new Atm(BigDecimal.valueOf(10100500));
+        ApplicationContext context =
+                new ClassPathXmlApplicationContext("context.xml");
+
+        Atm atm = context.getBean("Atm", Atm.class);
+        Client client1 = context.getBean("Client1", Client.class);
         atm.atmStart(client1);
         atm.enterPinCode(scanner.nextInt());
         if (validator.validate(atm).isEmpty()) {
@@ -33,8 +35,8 @@ public class Main {
             log.info("Клиенту удалось снять: " + rez + " руб.");
         }
 
-        SavingAccount account11 = new SavingAccount(BigDecimal.valueOf(500));
-        Client<SavingAccount> client11 = new Client<>(1122, account11);
+
+        Client client11 = context.getBean("Client2", Client.class);
         atm.atmStart(client11);
         atm.enterPinCode(scanner.nextInt());
         if (validator.validate(atm).isEmpty()) {
@@ -42,8 +44,7 @@ public class Main {
             log.info("Клиенту удалось снять: " + rez1 + " руб.");
         }
 
-        SavingAccount account12 = new SavingAccount(BigDecimal.valueOf(1000));
-        Client<SavingAccount> client12 = new Client<>(1122, account12);
+        Client client12 = context.getBean("Client3", Client.class);
         atm.atmStart(client12);
         atm.enterPinCode(scanner.nextInt());
         if (validator.validate(atm).isEmpty()) {
