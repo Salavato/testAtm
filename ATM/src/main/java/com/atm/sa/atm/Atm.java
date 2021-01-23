@@ -1,16 +1,22 @@
 package com.atm.sa.atm;
 
-import com.atm.sa.account.Account;
+import com.atm.sa.account.DefaultAccount;
 import com.atm.sa.client.Client;
 import com.atm.sa.exception.BusinessException;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
+import java.util.function.Predicate;
 
 @Data
 public class Atm {
-    private static final Client EMPTY_CLIENT = new Client(0000, new Account(BigDecimal.ZERO));
+    private static final Client EMPTY_CLIENT = new Client(0000, new DefaultAccount(BigDecimal.ZERO));
+    @NotNull
+    @PositiveOrZero
     private BigDecimal money;
+    @NotNull(message = "Используйте вместо null EMPTY_CLIENT")
     private Client client; //клиент который вставил свою карту
     private int pinCode;
     private int pinCodeCount;
@@ -41,11 +47,12 @@ public class Atm {
     public BigDecimal getMoneyForClient(BigDecimal amount) {
         BigDecimal cash = BigDecimal.ZERO;
 
-        if (!isPinValid()) {
+        if (!isPinValid(client1 -> client1.getPin() == pinCode)) {
             throw new BusinessException("Пин-код не верный");
         }
 
-        if (client.getAccount().isEnoughMoney(amount) && isEnoughMoney(amount)) {
+        if (client.getAccount().isEnoughMoney(amount) &&
+                isEnoughMoneyAtm(bigDecimal -> money.compareTo(bigDecimal) >= 0, amount)) {
             money = money.subtract(amount);
             client.getAccount().subtractAmount(amount); //вычитаем со счета клиента в банке
             cash = amount;
@@ -58,13 +65,14 @@ public class Atm {
     }
 
     //проверка наличия денег в банкомате
-    private boolean isEnoughMoney(BigDecimal amount) {
-        return money.compareTo(amount) >= 0;
+    private boolean isEnoughMoneyAtm(Predicate<BigDecimal> predicate, BigDecimal amount) {
+        return predicate.test(amount);
+        //money.compareTo(amount) >= 0;
     }
 
     //проверка пин-кода
-    private boolean isPinValid() {
-        return client.getPin() == pinCode;
+    private boolean isPinValid(Predicate<Client> predicate) {
+        return predicate.test(client);
     }
 
 }

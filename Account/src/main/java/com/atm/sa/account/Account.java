@@ -7,18 +7,14 @@ import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
-public class Account {
+public abstract class Account {
     private BigDecimal money;
+    private boolean canWithdraw;
 
     //вычитание со счета клиента в банке
-    public void subtractAmount(BigDecimal amount) {
-        money = money.subtract(amount);
-    }
+    public abstract void subtractAmount(BigDecimal amount);
 
     //проверка наличия денег на счете клиента
-    public boolean isEnoughMoney(BigDecimal amount) {
-        return money.compareTo(amount) >= 0;
-    }
-
+    public abstract boolean isEnoughMoney(BigDecimal amount);
 
 }

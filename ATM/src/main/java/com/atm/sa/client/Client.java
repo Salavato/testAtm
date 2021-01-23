@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Client {
+public class Client<T extends Account> {
     private int pin;
-    private Account account;
+    private T account;
 
 }
