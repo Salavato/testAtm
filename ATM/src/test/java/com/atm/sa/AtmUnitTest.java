@@ -6,6 +6,7 @@ import com.atm.sa.account.SavingAccount;
 import com.atm.sa.atm.Atm;
 import com.atm.sa.client.Client;
 import com.atm.sa.exception.BusinessException;
+import com.atm.sa.service.AccountService;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,8 +18,8 @@ public class AtmUnitTest {
     public void successfulGetMoney() {
 
         Account account = new DefaultAccount(BigDecimal.valueOf(500100));
-        Client client1 = new Client(1122, account);
-        Atm atm = new Atm(BigDecimal.valueOf(10100500));
+        Client client1 = new Client(1122, 1, account);
+        Atm atm = new Atm(BigDecimal.valueOf(10100500), new AccountService());
 
         atm.atmStart(client1);
         atm.enterPinCode(1122);
@@ -34,8 +35,8 @@ public class AtmUnitTest {
     public void wrongPin() {
 
         Account account = new DefaultAccount(BigDecimal.valueOf(500100));
-        Client client1 = new Client(1122, account);
-        Atm atm = new Atm(BigDecimal.valueOf(10100500));
+        Client client1 = new Client(1122, 2, account);
+        Atm atm = new Atm(BigDecimal.valueOf(10100500), new AccountService());
 
         atm.atmStart(client1);
         atm.enterPinCode(1111);
@@ -47,8 +48,8 @@ public class AtmUnitTest {
     public void doublePin() {
 
         Account account = new DefaultAccount(BigDecimal.valueOf(500100));
-        Client client1 = new Client(1122, account);
-        Atm atm = new Atm(BigDecimal.valueOf(10100500));
+        Client client1 = new Client(1122, 3, account);
+        Atm atm = new Atm(BigDecimal.valueOf(10100500), new AccountService());
 
         atm.atmStart(client1);
         atm.enterPinCode(1122);
@@ -59,8 +60,8 @@ public class AtmUnitTest {
     @Test
     public void notEnoughMoneyInAccount() {
         Account account = new DefaultAccount(BigDecimal.valueOf(100));
-        Client client1 = new Client(1122, account);
-        Atm atm = new Atm(BigDecimal.valueOf(10100500));
+        Client client1 = new Client(1122, 1, account);
+        Atm atm = new Atm(BigDecimal.valueOf(10100500), new AccountService());
 
         atm.atmStart(client1);
         atm.enterPinCode(1122);
@@ -76,8 +77,8 @@ public class AtmUnitTest {
     @Test
     public void notEnoughMoneyInAtm() {
         Account account = new DefaultAccount(BigDecimal.valueOf(500100));
-        Client client1 = new Client(1122, account);
-        Atm atm = new Atm(BigDecimal.valueOf(1010));
+        Client client1 = new Client(1122, 1, account);
+        Atm atm = new Atm(BigDecimal.valueOf(1010), new AccountService());
 
         atm.atmStart(client1);
         atm.enterPinCode(1122);
@@ -91,8 +92,8 @@ public class AtmUnitTest {
     @Test
     public void cantGetMoneyInSavingAccount() {
         SavingAccount account = new SavingAccount(BigDecimal.valueOf(1000));
-        Client<SavingAccount> client = new Client<>(1122, account);
-        Atm atm = new Atm(BigDecimal.valueOf(100500));
+        Client<SavingAccount> client = new Client<>(1122, 1, account);
+        Atm atm = new Atm(BigDecimal.valueOf(100500), new AccountService());
 
         atm.atmStart(client);
         atm.enterPinCode(1122);
