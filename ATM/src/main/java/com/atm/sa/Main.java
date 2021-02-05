@@ -1,11 +1,12 @@
 package com.atm.sa;
 
-import com.atm.sa.account.DefaultAccount;
 import com.atm.sa.atm.Atm;
 import com.atm.sa.client.Client;
 import lombok.extern.java.Log;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.ImportResource;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -14,17 +15,17 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 @Log
+@ImportResource("classpath:context.xml")
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
-        log.info("Начало программы");
+        ApplicationContext context = SpringApplication.run(Main.class, args);
 
+        log.info("Начало программы");
         Scanner scanner = new Scanner(System.in);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-
-        ApplicationContext context =
-                new ClassPathXmlApplicationContext("context.xml");
 
         Atm atm = context.getBean("Atm", Atm.class);
         Client client1 = context.getBean("Client1", Client.class);

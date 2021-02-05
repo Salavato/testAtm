@@ -1,8 +1,10 @@
 package com.atm.sa.atm;
 
-import com.atm.sa.account.DefaultAccount;
+import com.atm.sa.account.Account;
+import com.atm.sa.account.EmptyAccount;
 import com.atm.sa.client.Client;
 import com.atm.sa.exception.BusinessException;
+import com.atm.sa.service.AccountService;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -12,7 +14,7 @@ import java.util.function.Predicate;
 
 @Data
 public class Atm {
-    private static final Client EMPTY_CLIENT = new Client(0000, new DefaultAccount(BigDecimal.ZERO));
+    private static final Client EMPTY_CLIENT = new Client(-1, -1, new EmptyAccount());
     @NotNull
     @PositiveOrZero
     private BigDecimal money;
@@ -20,16 +22,21 @@ public class Atm {
     private Client client; //клиент который вставил свою карту
     private int pinCode;
     private int pinCodeCount;
+    private AccountService accountService;
 
-    public Atm(BigDecimal money) {
+    public Atm(BigDecimal money, AccountService accountService) {
         this.money = money;
         this.client = EMPTY_CLIENT;
         this.pinCodeCount = 0;
+        this.accountService = accountService;
     }
 
     //клиент вставил карту и банкомат получил информацию о клиенте
     public void atmStart(Client client) {
         this.client = client;
+        long id = client.getAccountId();
+        Account account = accountService.getAccount(id);
+        client.setAccount(account);
     }
 
     //проверка дублирования запроса
