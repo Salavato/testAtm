@@ -19,7 +19,7 @@ public class Atm {
     @PositiveOrZero
     private BigDecimal money;
     @NotNull(message = "Используйте вместо null EMPTY_CLIENT")
-    private Client client; //клиент который вставил свою карту
+    private Client client;
     private int pinCode;
     private int pinCodeCount;
     private AccountService accountService;
@@ -31,7 +31,6 @@ public class Atm {
         this.accountService = accountService;
     }
 
-    //клиент вставил карту и банкомат получил информацию о клиенте
     public void atmStart(Client client) {
         this.client = client;
         long id = client.getAccountId();
@@ -39,7 +38,6 @@ public class Atm {
         client.setAccount(account);
     }
 
-    //проверка дублирования запроса
     public void enterPinCode(int pinCode) {
         if (pinCodeCount < 1) {
             this.pinCode = pinCode;
@@ -49,8 +47,6 @@ public class Atm {
         }
     }
 
-
-    //снятие наличных
     public BigDecimal getMoneyForClient(BigDecimal amount) {
         BigDecimal cash = BigDecimal.ZERO;
 
@@ -61,23 +57,19 @@ public class Atm {
         if (client.getAccount().isEnoughMoney(amount) &&
                 isEnoughMoneyAtm(bigDecimal -> money.compareTo(bigDecimal) >= 0, amount)) {
             money = money.subtract(amount);
-            client.getAccount().subtractAmount(amount); //вычитаем со счета клиента в банке
+            client.getAccount().subtractAmount(amount);
             cash = amount;
         }
-        // зануляем данные о клиенте, чтобы банкомат больше ничего не знал о клиенте
         client = EMPTY_CLIENT;
-        //зануляем данные проверки дублирования
         pinCodeCount = 0;
         return cash;
     }
 
-    //проверка наличия денег в банкомате
     private boolean isEnoughMoneyAtm(Predicate<BigDecimal> predicate, BigDecimal amount) {
         return predicate.test(amount);
         //money.compareTo(amount) >= 0;
     }
 
-    //проверка пин-кода
     private boolean isPinValid(Predicate<Client> predicate) {
         return predicate.test(client);
     }

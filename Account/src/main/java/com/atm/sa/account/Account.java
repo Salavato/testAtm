@@ -27,10 +27,8 @@ public abstract class Account {
         this.canWithdraw = canWithdraw;
     }
 
-    //вычитание со счета клиента в банке
     public abstract void subtractAmount(BigDecimal amount);
 
-    //проверка наличия денег на счете клиента
     public abstract boolean isEnoughMoney(BigDecimal amount);
 
 }
